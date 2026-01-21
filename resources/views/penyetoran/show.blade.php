@@ -78,8 +78,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="text-center" style="width: 30px; font-size: 0.7rem; padding: 0.35rem 0.2rem;">No</th>
-                            <th style="width: 50px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
-                            <th style="width: 100px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
+                            <th style="width: 40px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
+                            <th style="width: 85px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
                             <th colspan="2" class="text-center bg-info bg-opacity-10" style="font-size: 0.7rem; padding: 0.35rem 0.2rem;">
                                 <i class="ti tabler-sunrise me-1"></i>Pagi
                             </th>
@@ -139,7 +139,7 @@
                                 <input type="text" class="form-control form-control-sm text-center cell-input d-none" 
                                        value="{{ $item['bj_sore'] }}" maxlength="4" placeholder="1022" style="font-size: 0.75rem; padding: 0.3rem;">
                             </td>
-                            <td class="text-center p-1 bg-success bg-opacity-10 total-per-row" style="font-size: 0.85rem; font-weight: 700;">
+                            <td class="text-center p-1 bg-success bg-opacity-10 total-per-row" style="font-size: 0.75rem; font-weight: 700;">
                                 <span class="text-success total-value-per-row">
                                     {{ number_format(($item['volume_pagi'] ?? 0) + ($item['volume_sore'] ?? 0), 2) }}
                                 </span>
@@ -169,23 +169,23 @@
                     @if($data->count() > 0)
                     <tfoot class="table-light border-top border-2">
                         <tr class="fw-bold">
-                            <td colspan="3" class="text-end" style="font-size: 0.75rem; padding: 0.4rem 0.3rem;">TOTAL:</td>
-                            <td class="text-center text-info" id="totalPagi" style="font-size: 0.85rem; padding: 0.4rem 0.2rem;">
+                            <td colspan="3" class="text-end" style="font-size: 0.7rem; padding: 0.4rem 0.3rem;">TOTAL:</td>
+                            <td class="text-center text-info" id="totalPagi" style="font-size: 0.75rem; padding: 0.4rem 0.2rem;">
                                 {{ number_format($totalVolumePagi, 2) }} L
                             </td>
-                            <td class="text-center text-muted" style="font-size: 0.7rem; padding: 0.4rem 0.2rem;">-</td>
-                            <td class="text-center text-warning" id="totalSore" style="font-size: 0.85rem; padding: 0.4rem 0.2rem;">
+                            <td class="text-center text-muted" style="font-size: 0.65rem; padding: 0.4rem 0.2rem;">-</td>
+                            <td class="text-center text-warning" id="totalSore" style="font-size: 0.75rem; padding: 0.4rem 0.2rem;">
                                 {{ number_format($totalVolumeSore, 2) }} L
                             </td>
-                            <td class="text-center text-muted" style="font-size: 0.7rem; padding: 0.4rem 0.2rem;">-</td>
-                            <td class="text-center text-success" id="totalAllInline" style="font-size: 0.85rem; padding: 0.4rem 0.2rem;">
+                            <td class="text-center text-muted" style="font-size: 0.65rem; padding: 0.4rem 0.2rem;">-</td>
+                            <td class="text-center text-success" id="totalAllInline" style="font-size: 0.75rem; padding: 0.4rem 0.2rem;">
                                 {{ number_format($totalVolume, 2) }} L
                             </td>
-                            <td class="text-center text-muted" style="font-size: 0.7rem; padding: 0.4rem 0.2rem;">-</td>
+                            <td class="text-center text-muted" style="font-size: 0.65rem; padding: 0.4rem 0.2rem;">-</td>
                         </tr>
                         <tr class="fw-bold bg-primary bg-opacity-10">
-                            <td colspan="3" class="text-end" style="font-size: 0.8rem; padding: 0.5rem 0.3rem;">TOTAL KESELURUHAN:</td>
-                            <td colspan="6" class="text-center text-primary" id="totalAll" style="font-size: 0.9rem; padding: 0.5rem 0.2rem;">
+                            <td colspan="3" class="text-end" style="font-size: 0.75rem; padding: 0.5rem 0.3rem;">TOTAL KESELURUHAN:</td>
+                            <td colspan="6" class="text-center text-primary" id="totalAll" style="font-size: 0.8rem; padding: 0.5rem 0.2rem;">
                                 <i class="ti tabler-droplet me-1"></i>
                                 <span class="total-value">{{ number_format($totalVolume, 2) }}</span> Liter
                             </td>
@@ -321,8 +321,8 @@
                 <div class="modal-body">
                     <input type="hidden" id="edit_peternak_id">
                     <div class="mb-3">
-                        <label class="form-label fw-medium">Kode Peternak</label>
-                        <input type="text" class="form-control" id="edit_kode_peternak" readonly>
+                        <label class="form-label fw-medium">Kode Peternak <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control text-uppercase" id="edit_kode_peternak" required maxlength="50">
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-medium">Nama Peternak <span class="text-danger">*</span></label>
@@ -570,6 +570,12 @@ document.addEventListener('DOMContentLoaded', function() {
         this.value = this.value.toUpperCase();
         this.value = this.value.replace(/[^A-Z0-9-]/g, '');
     });
+    
+    // Auto uppercase untuk edit kode peternak juga
+    document.getElementById('edit_kode_peternak')?.addEventListener('input', function(e) {
+        this.value = this.value.toUpperCase();
+        this.value = this.value.replace(/[^A-Z0-9-]/g, '');
+    });
 
     // ========== FORM TAMBAH PETERNAK ==========
     document.getElementById('formAddPeternak')?.addEventListener('submit', function(e) {
@@ -637,32 +643,57 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         const id = document.getElementById('edit_peternak_id').value;
+        const kode = document.getElementById('edit_kode_peternak').value;
         const nama = document.getElementById('edit_nama_peternak').value;
         const active = document.getElementById('edit_is_active').checked;
         
+        if (!kode || !nama) {
+            showToast('Error', 'Kode dan nama peternak wajib diisi', 'danger');
+            return;
+        }
+        
+        if (!/^[A-Z0-9-]+$/.test(kode)) {
+            showToast('Error', 'Kode hanya boleh huruf besar, angka, dan strip (-)', 'danger');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('kode_peternak', kode);
+        formData.append('nama_peternak', nama);
+        formData.append('is_active', active ? 1 : 0);
+        
+        console.log('Sending update request:', {
+            id: id,
+            kode: kode,
+            nama: nama,
+            active: active,
+            url: `{{ url('peternak') }}/${id}`
+        });
+        
         fetch(`{{ url('peternak') }}/${id}`, {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
-                nama_peternak: nama,
-                is_active: active
-            })
+            body: formData
         })
         .then(res => res.json())
         .then(data => {
+            console.log('Update response:', data);
             if (data.success) {
                 showToast('Berhasil', data.message, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalEditPeternak')).hide();
                 loadPeternakList();
                 setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast('Error', data.message || 'Gagal update peternak', 'danger');
             }
         })
         .catch(err => {
-            console.error(err);
+            console.error('Update error:', err);
             showToast('Error', 'Gagal update peternak', 'danger');
         });
     });
@@ -1010,9 +1041,9 @@ code {
     /* Mobile: Kolom kode & nama kecil */
     th:nth-child(2), td:nth-child(2),
     th:nth-child(3), td:nth-child(3) {
-        font-size: 0.6rem !important;
-        padding: 0.15rem 0.2rem !important;
-        max-width: 60px;
+        font-size: 0.55rem !important;
+        padding: 0.1rem 0.15rem !important;
+        max-width: 50px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1020,8 +1051,8 @@ code {
     
     /* Kode peternak extra small */
     td:nth-child(2) code {
-        font-size: 0.55rem !important;
-        padding: 0.05rem 0.15rem !important;
+        font-size: 0.5rem !important;
+        padding: 0.05rem 0.1rem !important;
     }
     
     /* Volume & BJ lebih visible di mobile */

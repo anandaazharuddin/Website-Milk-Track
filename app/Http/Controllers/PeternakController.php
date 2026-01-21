@@ -107,23 +107,33 @@ class PeternakController extends Controller
     public function update(Request $request, Peternak $peternak)
     {
         $request->validate([
+            'kode_peternak' => [
+                'required',
+                'string',
+                'max:50',
+                'unique:peternak,kode_peternak,' . $peternak->id,
+                'regex:/^[A-Z0-9-]+$/',
+            ],
             'nama_peternak' => 'required|string|max:255',
-            'alamat' => 'nullable|string|max:500',
-            'no_hp' => 'nullable|string|max:20',
-            'is_active' => 'boolean',
+            'is_active' => 'nullable',
         ]);
 
-        $peternak->update([
-            'nama_peternak' => $request->nama_peternak,
-            'alamat' => $request->alamat,
-            'no_hp' => $request->no_hp,
-            'is_active' => $request->is_active ?? true,
-        ]);
+        // Convert is_active to boolean
+        $isActive = true;
+        if ($request->has('is_active')) {
+            $isActive = $request->is_active == '1' || $request->is_active === true;
+        }
+
+        $peternak->kode_peternak = strtoupper($request->kode_peternak);
+        $peternak->nama_peternak = $request->nama_peternak;
+        $peternak->is_active = $isActive;
+        $peternak->save();
 
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Data peternak berhasil diupdate!'
+                'message' => 'Data peternak berhasil diupdate!',
+                'data' => $peternak
             ]);
         }
 
@@ -134,30 +144,21 @@ class PeternakController extends Controller
     public function destroy(Peternak $peternak)
     {
         try {
-            // Cek apakah peternak memiliki data penyetoran
-            if ($peternak->penyetoranHarian()->count() > 0) {
-                if (request()->expectsJson()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Tidak dapat menghapus peternak yang sudah memiliki data penyetoran!'
-                    ], 400);
-                }
-                
-                return redirect()->route('peternak.index')
-                    ->with('error', 'Tidak dapat menghapus peternak yang sudah memiliki data penyetoran!');
-            }
-
+            // Hapus semua data penyetoran terkait terlebih dahulu
+            $peternak->penyetoranHarian()->delete();
+            
+            // Hapus peternak
             $peternak->delete();
 
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data peternak berhasil dihapus!'
+                    'message' => 'Data peternak dan semua data penyetoran berhasil dihapus!'
                 ]);
             }
 
             return redirect()->route('peternak.index')
-                ->with('success', 'Data peternak berhasil dihapus!');
+                ->with('success', 'Data peternak dan semua data penyetoran berhasil dihapus!');
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
@@ -174,9 +175,8 @@ class PeternakController extends Controller
     public function getByPos($posId)
     {
         $peternakList = Peternak::where('pos_id', $posId)
-            ->where('is_active', true)
             ->orderBy('kode_peternak')
-            ->get(['id', 'kode_peternak', 'nama_peternak']);
+            ->get(['id', 'kode_peternak', 'nama_peternak', 'is_active']);
 
         return response()->json($peternakList);
     }
