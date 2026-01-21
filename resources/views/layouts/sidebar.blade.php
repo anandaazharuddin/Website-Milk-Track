@@ -63,19 +63,6 @@
                         <div>Penyetoran Harian</div>
                     </a>
                 </li>
-
-                <li class="menu-header mt-7">
-                    <span class="menu-header-text">D-Learn</span>
-                </li>
-
-                {{-- Artikel - READ ONLY --}}
-                <li class="menu-item {{ request()->routeIs('articles.list') ? 'active' : '' }}">
-                    <a href="{{ route('articles.list') }}" class="menu-link">
-                        <i class="menu-icon ti tabler-news"></i>
-                        <div>Artikel & Informasi</div>
-                        <span class="badge bg-info rounded-pill ms-auto" style="font-size: 0.65rem;">Baca</span>
-                    </a>
-                </li>
             @endif
 
         {{-- Menu untuk PETERNAK --}}

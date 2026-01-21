@@ -108,23 +108,24 @@ class PeternakController extends Controller
     {
         $request->validate([
             'nama_peternak' => 'required|string|max:255',
-            'pos_id' => 'required|exists:pos_penyetoran,id',
             'alamat' => 'nullable|string|max:500',
             'no_hp' => 'nullable|string|max:20',
             'is_active' => 'boolean',
         ]);
 
-        if ($peternak->pos_id != $request->pos_id) {
-            $peternak->kode_peternak = Peternak::generateKode($request->pos_id);
-        }
-
         $peternak->update([
             'nama_peternak' => $request->nama_peternak,
-            'pos_id' => $request->pos_id,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
-            'is_active' => $request->has('is_active'),
+            'is_active' => $request->is_active ?? true,
         ]);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data peternak berhasil diupdate!'
+            ]);
+        }
 
         return redirect()->route('peternak.index')
             ->with('success', 'Data peternak berhasil diupdate!');
@@ -132,15 +133,42 @@ class PeternakController extends Controller
 
     public function destroy(Peternak $peternak)
     {
-        if ($peternak->penyetoranHarian()->count() > 0) {
+        try {
+            // Cek apakah peternak memiliki data penyetoran
+            if ($peternak->penyetoranHarian()->count() > 0) {
+                if (request()->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Tidak dapat menghapus peternak yang sudah memiliki data penyetoran!'
+                    ], 400);
+                }
+                
+                return redirect()->route('peternak.index')
+                    ->with('error', 'Tidak dapat menghapus peternak yang sudah memiliki data penyetoran!');
+            }
+
+            $peternak->delete();
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data peternak berhasil dihapus!'
+                ]);
+            }
+
             return redirect()->route('peternak.index')
-                ->with('error', 'Tidak dapat menghapus peternak yang sudah memiliki data penyetoran!');
+                ->with('success', 'Data peternak berhasil dihapus!');
+        } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->route('peternak.index')
+                ->with('error', 'Terjadi kesalahan saat menghapus data!');
         }
-
-        $peternak->delete();
-
-        return redirect()->route('peternak.index')
-            ->with('success', 'Data peternak berhasil dihapus!');
     }
 
     public function getByPos($posId)

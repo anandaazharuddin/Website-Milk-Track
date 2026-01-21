@@ -28,6 +28,7 @@ class WelcomeController extends Controller
         $pos2 = PosPenyetoran::where('id', 2)->first();
 
         // Ambil data peternak dan penyetoran untuk Pos 1 (hari yang dipilih)
+        // Ambil SEMUA peternak aktif (tidak dibatasi)
         $peternakPos1 = Peternak::where('pos_id', 1)
             ->where('is_active', true)
             ->orderBy('nama_peternak')
@@ -65,6 +66,7 @@ class WelcomeController extends Controller
         }
 
         // Ambil data peternak dan penyetoran untuk Pos 2 (hari yang dipilih)
+        // Ambil SEMUA peternak aktif (tidak dibatasi)
         $peternakPos2 = Peternak::where('pos_id', 2)
             ->where('is_active', true)
             ->orderBy('nama_peternak')

@@ -447,6 +447,38 @@
         width: 24px !important;
         border-radius: 5px !important;
     }
+    
+    /* ========== NAVBAR RESPONSIVE FIX ========== */
+    .navbar-nav.flex-row {
+        gap: 0.5rem;
+    }
+    
+    @media (max-width: 991px) {
+        .navbar-nav.flex-row {
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+        }
+        
+        .navbar-nav.flex-row .nav-item {
+            flex-shrink: 0;
+        }
+        
+        .navbar-nav.flex-row .btn-primary {
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+    }
+    
+    @media (max-width: 575px) {
+        .navbar-nav.flex-row {
+            gap: 0.25rem;
+        }
+        
+        .navbar-nav.flex-row .btn-primary {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.875rem;
+        }
+    }
 </style>
 
 <body>
@@ -492,9 +524,6 @@
                         <li class="nav-item">
                             <a class="nav-link fw-medium" href="#landingArticles">D-Learn</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#landingContact">Contact us</a>
-                        </li>
                     </ul>
                 </div>
 
@@ -538,13 +567,7 @@
                     
                     <!-- Login Button: Start -->
                     <li class="nav-item">
-                        <div class="landing-hero-btn d-inline-block position-relative">
-                            <span class="hero-btn-item position-absolute d-none d-md-flex fw-medium">Join Now!
-                                <img src="{{ asset('assets/img/front-pages/icons/Join-community-arrow.png') }}"
-                                    alt="Join community arrow" class="scaleX-n1-rtl" />
-                            </span>
-                            <a href="{{ route('login') }}" class="btn btn-primary btn-lg">Login</a>
-                        </div>
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
                     </li>
                     <!-- Login Button: End -->
                     
@@ -858,7 +881,7 @@
                                         <i class="ti ti-users me-1"></i>{{ count($dataPos2) }} Peternak
                                     </span>
                                 </div>
-                                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                                <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
                                     <table class="table table-hover table-sm mb-0">
                                         <thead class="table-light sticky-top">
                                             <tr>

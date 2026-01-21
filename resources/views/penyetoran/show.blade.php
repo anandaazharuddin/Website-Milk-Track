@@ -78,8 +78,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="text-center" style="width: 30px; font-size: 0.7rem; padding: 0.35rem 0.2rem;">No</th>
-                            <th style="width: 70px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
-                            <th style="width: 120px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
+                            <th style="width: 50px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
+                            <th style="width: 100px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
                             <th colspan="2" class="text-center bg-info bg-opacity-10" style="font-size: 0.7rem; padding: 0.35rem 0.2rem;">
                                 <i class="ti tabler-sunrise me-1"></i>Pagi
                             </th>
@@ -1010,22 +1010,35 @@ code {
     /* Mobile: Kolom kode & nama kecil */
     th:nth-child(2), td:nth-child(2),
     th:nth-child(3), td:nth-child(3) {
-        font-size: 0.65rem !important;
-        padding: 0.2rem !important;
-        max-width: 80px;
+        font-size: 0.6rem !important;
+        padding: 0.15rem 0.2rem !important;
+        max-width: 60px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    
+    /* Kode peternak extra small */
+    td:nth-child(2) code {
+        font-size: 0.55rem !important;
+        padding: 0.05rem 0.15rem !important;
     }
     
     /* Volume & BJ lebih visible di mobile */
     th:nth-child(4), td:nth-child(4),
     th:nth-child(5), td:nth-child(5),
     th:nth-child(6), td:nth-child(6),
-    th:nth-child(7), td:nth-child(7),
-    th:nth-child(8), td:nth-child(8) {
-        font-size: 0.8rem !important;
+    th:nth-child(7), td:nth-child(7) {
+        font-size: 0.85rem !important;
         font-weight: 700 !important;
+        padding: 0.3rem 0.25rem !important;
+    }
+    
+    /* Total column bigger */
+    th:nth-child(8), td:nth-child(8) {
+        font-size: 0.9rem !important;
+        font-weight: 800 !important;
+        padding: 0.3rem !important;
     }
     
     /* Compact button spacing */
@@ -1048,6 +1061,13 @@ code {
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        max-width: 100vw;
+    }
+    
+    /* Table min width untuk scroll horizontal yang smooth */
+    #tablePenyetoran {
+        min-width: 600px;
+        width: 100%;
     }
     
     /* Make total column sticky on mobile */
@@ -1056,6 +1076,7 @@ code {
         right: 50px;
         background-color: #f0fdf4 !important;
         z-index: 10;
+        box-shadow: -2px 0 4px rgba(0,0,0,0.05);
     }
     
     /* Sticky action column */
