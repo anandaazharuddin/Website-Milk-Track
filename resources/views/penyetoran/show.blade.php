@@ -77,9 +77,8 @@
                 <table class="table table-hover table-sm mb-0 align-middle" id="tablePenyetoran">
                     <thead class="table-light">
                         <tr>
-                            <th class="text-center" style="width: 30px; font-size: 0.7rem; padding: 0.35rem 0.2rem;">No</th>
-                            <th style="width: 40px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
-                            <th style="width: 85px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
+                            <th style="width: 50px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Kode</th>
+                            <th style="width: 70px; font-size: 0.7rem; padding: 0.35rem 0.3rem;">Peternak</th>
                             <th colspan="2" class="text-center bg-info bg-opacity-10" style="font-size: 0.7rem; padding: 0.35rem 0.2rem;">
                                 <i class="ti tabler-sunrise me-1"></i>Pagi
                             </th>
@@ -89,32 +88,28 @@
                             <th class="text-center bg-success bg-opacity-10" style="width: 90px; font-size: 0.7rem; padding: 0.35rem 0.2rem;">
                                 <i class="ti tabler-droplet me-1"></i>Total (L)
                             </th>
-                            <th class="text-center" style="width: 50px; font-size: 0.7rem; padding: 0.35rem 0.2rem;">Aksi</th>
                         </tr>
                         <tr class="table-light">
                             <th></th>
                             <th></th>
-                            <th></th>
-                            <th class="text-center bg-info bg-opacity-10" style="width: 110px; padding: 0.25rem;">
+                            <th class="text-center bg-info bg-opacity-10" style="width: 120px; padding: 0.25rem;">
                                 <small style="font-size: 0.65rem;">Vol (L)</small>
                             </th>
-                            <th class="text-center bg-info bg-opacity-10" style="width: 90px; padding: 0.25rem;">
+                            <th class="text-center bg-info bg-opacity-10" style="width: 100px; padding: 0.25rem;">
                                 <small style="font-size: 0.65rem;">BJ</small>
                             </th>
-                            <th class="text-center bg-warning bg-opacity-10" style="width: 110px; padding: 0.25rem;">
+                            <th class="text-center bg-warning bg-opacity-10" style="width: 120px; padding: 0.25rem;">
                                 <small style="font-size: 0.65rem;">Vol (L)</small>
                             </th>
-                            <th class="text-center bg-warning bg-opacity-10" style="width: 90px; padding: 0.25rem;">
+                            <th class="text-center bg-warning bg-opacity-10" style="width: 100px; padding: 0.25rem;">
                                 <small style="font-size: 0.65rem;">BJ</small>
                             </th>
-                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($data as $index => $item)
                         <tr data-peternak-id="{{ $item['peternak_id'] }}" data-penyetoran-id="{{ $item['penyetoran_id'] }}">
-                            <td class="text-center text-muted" style="font-size: 0.7rem; padding: 0.25rem 0.2rem;">{{ $index + 1 }}</td>
                             <td style="padding: 0.25rem 0.3rem;">
                                 <code class="text-primary" style="font-size: 0.65rem;">{{ $item['kode_peternak'] ?? '-' }}</code>
                             </td>
@@ -144,19 +139,10 @@
                                     {{ number_format(($item['volume_pagi'] ?? 0) + ($item['volume_sore'] ?? 0), 2) }}
                                 </span>
                             </td>
-                            <td class="text-center p-1">
-                                @if($item['penyetoran_id'])
-                                <button type="button" class="btn btn-sm btn-danger btn-delete" 
-                                        data-id="{{ $item['penyetoran_id'] }}"
-                                        title="Hapus" style="padding: 0.2rem 0.4rem;">
-                                    <i class="ti tabler-trash" style="font-size: 0.9rem;"></i>
-                                </button>
-                                @endif
-                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
+                            <td colspan="7" class="text-center text-muted py-4">
                                 <i class="ti tabler-users fs-2 d-block mb-2 opacity-25"></i>
                                 <p class="mb-2" style="font-size: 0.875rem;">Belum ada peternak di pos ini</p>
                                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalManagePeternak">
@@ -169,7 +155,7 @@
                     @if($data->count() > 0)
                     <tfoot class="table-light border-top border-2">
                         <tr class="fw-bold">
-                            <td colspan="3" class="text-end" style="font-size: 0.7rem; padding: 0.4rem 0.3rem;">TOTAL:</td>
+                            <td colspan="2" class="text-end" style="font-size: 0.7rem; padding: 0.4rem 0.3rem;">TOTAL:</td>
                             <td class="text-center text-info" id="totalPagi" style="font-size: 0.75rem; padding: 0.4rem 0.2rem;">
                                 {{ number_format($totalVolumePagi, 2) }} L
                             </td>
@@ -181,11 +167,10 @@
                             <td class="text-center text-success" id="totalAllInline" style="font-size: 0.75rem; padding: 0.4rem 0.2rem;">
                                 {{ number_format($totalVolume, 2) }} L
                             </td>
-                            <td class="text-center text-muted" style="font-size: 0.65rem; padding: 0.4rem 0.2rem;">-</td>
                         </tr>
                         <tr class="fw-bold bg-primary bg-opacity-10">
-                            <td colspan="3" class="text-end" style="font-size: 0.75rem; padding: 0.5rem 0.3rem;">TOTAL KESELURUHAN:</td>
-                            <td colspan="6" class="text-center text-primary" id="totalAll" style="font-size: 0.8rem; padding: 0.5rem 0.2rem;">
+                            <td colspan="2" class="text-end" style="font-size: 0.75rem; padding: 0.5rem 0.3rem;">TOTAL KESELURUHAN:</td>
+                            <td colspan="5" class="text-center text-primary" id="totalAll" style="font-size: 0.8rem; padding: 0.5rem 0.2rem;">
                                 <i class="ti tabler-droplet me-1"></i>
                                 <span class="total-value">{{ number_format($totalVolume, 2) }}</span> Liter
                             </td>
@@ -383,6 +368,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tanggalPicker = document.getElementById('tanggalPicker');
     const posId = document.getElementById('currentPosId').value;
+    
+    // ========== HELPER FUNCTION ==========
+    // Format angka: hilangkan .00 tapi tampilkan desimal jika ada
+    function formatNumber(num) {
+        if (!num) return '-';
+        const parsed = parseFloat(num);
+        return parsed % 1 === 0 ? parsed.toString() : parsed.toFixed(2);
+    }
     
     // ========== DATE NAVIGATION ==========
     function goToDate(date) {
@@ -756,7 +749,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'bj') {
             display.textContent = value ? (parseFloat(value) / 1000).toFixed(3) : '-';
         } else {
-            display.textContent = value ? parseFloat(value).toFixed(2) : '-';
+            display.textContent = formatNumber(value);
         }
         
         display.classList.remove('d-none');
@@ -786,20 +779,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 cell.style.backgroundColor = '#d4edda';
                 row.dataset.penyetoranId = data.data.id;
                 
-                const actionCell = row.querySelector('td:last-child');
-                if (!actionCell.querySelector('.btn-delete')) {
-                    actionCell.innerHTML = `
-                        <button type="button" class="btn btn-sm btn-danger btn-delete" 
-                                data-id="${data.data.id}" title="Hapus" style="padding: 0.2rem 0.4rem;">
-                            <i class="ti tabler-trash" style="font-size: 0.9rem;"></i>
-                        </button>
-                    `;
-                    
-                    actionCell.querySelector('.btn-delete').addEventListener('click', function() {
-                        deleteRow(this);
-                    });
-                }
-                
                 setTimeout(() => {
                     cell.style.backgroundColor = '';
                 }, 2000);
@@ -813,7 +792,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (type === 'bj') {
                     display.textContent = input.defaultValue ? (parseFloat(input.defaultValue) / 1000).toFixed(3) : '-';
                 } else {
-                    display.textContent = input.defaultValue ? parseFloat(input.defaultValue).toFixed(2) : '-';
+                    display.textContent = formatNumber(input.defaultValue);
                 }
                 
                 setTimeout(() => {
@@ -825,38 +804,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(err);
             cell.style.backgroundColor = '#f8d7da';
             showToast('Error', 'Terjadi kesalahan', 'danger');
-        });
-    }
-
-    // ========== DELETE ROW ==========
-    document.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            deleteRow(this);
-        });
-    });
-
-    function deleteRow(btn) {
-        if (!confirm('Hapus data penyetoran ini?')) return;
-        
-        const id = btn.dataset.id;
-        
-        fetch(`{{ url('penyetoran') }}/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showToast('Berhasil', 'Data berhasil dihapus', 'success');
-                window.location.reload();
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            showToast('Error', 'Gagal menghapus data', 'danger');
         });
     }
 
@@ -873,17 +820,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update total per row
             const totalCell = row.querySelector('.total-value-per-row');
             if (totalCell) {
-                totalCell.textContent = totalRow.toFixed(2);
+                totalCell.textContent = formatNumber(totalRow);
             }
             
             totalPagi += volPagi;
             totalSore += volSore;
         });
         
-        document.getElementById('totalPagi').textContent = totalPagi.toFixed(2) + ' L';
-        document.getElementById('totalSore').textContent = totalSore.toFixed(2) + ' L';
-        document.getElementById('totalAllInline').textContent = (totalPagi + totalSore).toFixed(2) + ' L';
-        document.querySelector('.total-value').textContent = (totalPagi + totalSore).toFixed(2);
+        document.getElementById('totalPagi').textContent = formatNumber(totalPagi) + ' L';
+        document.getElementById('totalSore').textContent = formatNumber(totalSore) + ' L';
+        document.getElementById('totalAllInline').textContent = formatNumber(totalPagi + totalSore) + ' L';
+        document.querySelector('.total-value').textContent = formatNumber(totalPagi + totalSore);
     }
 
     // ========== EXPORT WITH CONFIRMATION ==========
@@ -1019,13 +966,17 @@ code {
 
 /* ========== MOBILE OPTIMIZATIONS ========== */
 @media (max-width: 767px) {
-    /* Hide desktop view, show mobile cards */
-    #peternakCardsMobile {
-        display: block !important;
+    /* Remove horizontal scroll - fit content to screen */
+    .table-responsive {
+        overflow-x: hidden !important;
+        font-size: 0.65rem;
     }
     
-    .table-responsive.d-md-block {
-        display: none !important;
+    /* Table takes full width, no min-width */
+    #tablePenyetoran {
+        width: 100% !important;
+        min-width: unset !important;
+        table-layout: fixed;
     }
     
     /* Compact header on mobile */
@@ -1033,49 +984,82 @@ code {
         padding: 0.5rem !important;
     }
     
-    /* Smaller font for table */
-    .table-responsive {
-        font-size: 0.7rem;
+    /* Adjust column widths for mobile - no scroll */
+    /* No need for No column since it's removed */
+    
+    /* Kode - compact */
+    #tablePenyetoran th:nth-child(1),
+    #tablePenyetoran td:nth-child(1) {
+        width: 40px !important;
+        font-size: 0.55rem !important;
+        padding: 0.2rem 0.15rem !important;
     }
     
-    /* Mobile: Kolom kode & nama kecil */
-    th:nth-child(2), td:nth-child(2),
-    th:nth-child(3), td:nth-child(3) {
-        font-size: 0.55rem !important;
-        padding: 0.1rem 0.15rem !important;
-        max-width: 50px;
+    #tablePenyetoran td:nth-child(1) code {
+        font-size: 0.5rem !important;
+        padding: 0 !important;
+        display: block;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    
+    /* Nama peternak - smaller, truncate */
+    #tablePenyetoran th:nth-child(2),
+    #tablePenyetoran td:nth-child(2) {
+        width: 50px !important;
+        font-size: 0.58rem !important;
+        padding: 0.2rem 0.15rem !important;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
-    /* Kode peternak extra small */
-    td:nth-child(2) code {
-        font-size: 0.5rem !important;
-        padding: 0.05rem 0.1rem !important;
-    }
-    
-    /* Volume & BJ lebih visible di mobile */
-    th:nth-child(4), td:nth-child(4),
-    th:nth-child(5), td:nth-child(5),
-    th:nth-child(6), td:nth-child(6),
-    th:nth-child(7), td:nth-child(7) {
-        font-size: 0.85rem !important;
+    /* Volume columns - wider and prioritized */
+    #tablePenyetoran th:nth-child(3),
+    #tablePenyetoran td:nth-child(3),
+    #tablePenyetoran th:nth-child(5),
+    #tablePenyetoran td:nth-child(5) {
+        width: 65px !important;
+        font-size: 0.75rem !important;
         font-weight: 700 !important;
-        padding: 0.3rem 0.25rem !important;
+        padding: 0.25rem 0.2rem !important;
     }
     
-    /* Total column bigger */
-    th:nth-child(8), td:nth-child(8) {
-        font-size: 0.9rem !important;
+    /* BJ columns - wider */
+    #tablePenyetoran th:nth-child(4),
+    #tablePenyetoran td:nth-child(4),
+    #tablePenyetoran th:nth-child(6),
+    #tablePenyetoran td:nth-child(6) {
+        width: 55px !important;
+        font-size: 0.68rem !important;
+        padding: 0.25rem 0.15rem !important;
+    }
+    
+    /* Total column */
+    #tablePenyetoran th:nth-child(7),
+    #tablePenyetoran td:nth-child(7) {
+        width: 60px !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
-        padding: 0.3rem !important;
+        padding: 0.25rem 0.2rem !important;
+    }
+    
+    /* Hide icons in mobile header to save space */
+    #tablePenyetoran thead i {
+        display: none !important;
+    }
+    
+    /* Smaller input fields on mobile */
+    .editable-cell input {
+        font-size: 0.7rem !important;
+        padding: 0.2rem 0.1rem !important;
     }
     
     /* Compact button spacing */
     .btn-sm {
-        padding: 0.25rem 0.5rem !important;
-        font-size: 0.75rem !important;
+        padding: 0.25rem 0.4rem !important;
+        font-size: 0.7rem !important;
     }
     
     /* Stack action buttons on mobile */
@@ -1088,20 +1072,17 @@ code {
         width: 100%;
     }
     
-    /* Horizontal scroll for table */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        max-width: 100vw;
+    /* Alert compact */
+    .alert {
+        font-size: 0.7rem !important;
+        padding: 0.4rem !important;
     }
     
-    /* Table min width untuk scroll horizontal yang smooth */
-    #tablePenyetoran {
-        min-width: 600px;
-        width: 100%;
+    /* Hide some labels in thead subrow */
+    #tablePenyetoran thead tr:nth-child(2) small {
+        font-size: 0.55rem !important;
     }
-    
-    /* Make total column sticky on mobile */
+}
     .total-per-row {
         position: sticky;
         right: 50px;

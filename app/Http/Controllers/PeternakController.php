@@ -175,7 +175,7 @@ class PeternakController extends Controller
     public function getByPos($posId)
     {
         $peternakList = Peternak::where('pos_id', $posId)
-            ->orderBy('kode_peternak')
+            ->orderBy('id', 'asc')
             ->get(['id', 'kode_peternak', 'nama_peternak', 'is_active']);
 
         return response()->json($peternakList);

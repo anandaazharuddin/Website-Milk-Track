@@ -13,6 +13,7 @@ class WelcomeController extends Controller
 {
     public function index(Request $request)
     {
+        //ada perubahan 
         // Ambil tanggal dari request, default hari ini
         $tanggal = $request->get('tanggal', Carbon::today()->format('Y-m-d'));
         $tanggalCarbon = Carbon::parse($tanggal);

@@ -53,7 +53,7 @@ class PenyetoranHarianController extends Controller
 
         $peternakList = Peternak::where('pos_id', $posId)
             ->where('is_active', true)
-            ->orderBy('nama_peternak')
+            ->orderBy('id', 'asc')
             ->get();
 
         $penyetoranData = PenyetoranHarian::where('pos_id', $posId)
@@ -198,7 +198,7 @@ class PenyetoranHarianController extends Controller
 
         $peternakList = Peternak::where('pos_id', $pos->id)
             ->where('is_active', true)
-            ->orderBy('nama_peternak')
+            ->orderBy('id', 'asc')
             ->get();
 
         $penyetoranData = PenyetoranHarian::where('pos_id', $pos->id)
