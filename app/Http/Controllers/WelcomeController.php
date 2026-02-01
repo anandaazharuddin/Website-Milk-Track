@@ -18,9 +18,9 @@ class WelcomeController extends Controller
         $tanggal = $request->get('tanggal', Carbon::today()->format('Y-m-d'));
         $tanggalCarbon = Carbon::parse($tanggal);
 
-        // Ambil artikel yang dipublish dalam 7 hari terakhir
+        // Ambil semua artikel yang dipublish (tidak ada batasan waktu)
+        // Artikel lama hanya dihapus saat ada artikel baru ditambahkan
         $articles = Article::where('is_published', true)
-            ->where('created_at', '>=', Carbon::now()->subDays(7))
             ->latest()
             ->get();
 

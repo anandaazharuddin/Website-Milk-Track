@@ -6,6 +6,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ArticleController extends Controller
 {
@@ -62,10 +63,24 @@ class ArticleController extends Controller
             $data['image'] = $request->file('image')->store('articles', 'public');
         }
 
+        // Buat artikel baru
         Article::create($data);
 
+        // Auto-cleanup: Hapus artikel yang berusia >= 7 hari
+        // Hanya terjadi saat ada artikel BARU ditambahkan
+        $sevenDaysAgo = now()->subDays(7);
+        $oldArticles = Article::where('created_at', '<=', $sevenDaysAgo)->get();
+        
+        foreach ($oldArticles as $oldArticle) {
+            // Hapus image jika ada
+            if ($oldArticle->image) {
+                Storage::disk('public')->delete($oldArticle->image);
+            }
+            $oldArticle->delete();
+        }
+
         return redirect()->route('articles.index')
-            ->with('success', 'Artikel berhasil ditambahkan!');
+            ->with('success', 'Artikel berhasil ditambahkan! ' . ($oldArticles->count() > 0 ? $oldArticles->count() . ' artikel lama (>= 7 hari) telah dihapus.' : ''));
     }
 
     /**

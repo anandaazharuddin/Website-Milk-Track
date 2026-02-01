@@ -331,6 +331,130 @@
     </div>
 </div>
 
+{{-- MODAL KONFIRMASI TANGGAL --}}
+<div class="modal fade" id="modalConfirmDate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <!-- Header dengan gradient modern -->
+            <div class="modal-header border-0 bg-gradient-warning text-white position-relative" 
+                 style="background: linear-gradient(135deg, #ff9800 0%, #ff6f00 100%); padding: 1.5rem;">
+                <h5 class="modal-title fw-bold d-flex align-items-center mb-0">
+                    <span class="badge bg-white bg-opacity-25 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="ti tabler-calendar-exclamation fs-4"></i>
+                    </span>
+                    <span>Konfirmasi Tanggal Input</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <!-- Body dengan spacing modern -->
+            <div class="modal-body text-center p-4" style="padding: 2rem 1.5rem !important;">
+                <!-- Icon besar dengan animasi -->
+                <div class="mb-4 position-relative d-inline-block">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
+                         style="width: 100px; height: 100px; animation: pulse-warning 2s ease-in-out infinite;">
+                        <i class="ti tabler-calendar-event" style="font-size: 55px; color: #ff9800;"></i>
+                    </div>
+                    <span class="position-absolute top-0 end-0 badge rounded-pill bg-danger" 
+                          style="font-size: 0.7rem; padding: 0.4rem 0.6rem;">
+                        <i class="ti tabler-alert-triangle me-1"></i>Peringatan
+                    </span>
+                </div>
+                
+                <!-- Judul dengan typography modern -->
+                <h4 class="fw-bold mb-3" style="color: #2c3e50; font-size: 1.4rem;">
+                    Apakah Anda Yakin?
+                </h4>
+                
+                <!-- Info tanggal dengan card -->
+                <div class="alert alert-warning border-0 shadow-sm mx-auto" style="max-width: 400px; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <i class="ti tabler-calendar fs-5 me-2" style="color: #f57c00;"></i>
+                        <strong style="color: #e65100; font-size: 1rem;">Tanggal yang Dipilih:</strong>
+                    </div>
+                    <p class="mb-2 fs-5 fw-bold" style="color: #ff6f00;" id="selectedDateText"></p>
+                    <div class="badge bg-danger-subtle text-danger px-3 py-2">
+                        <i class="ti tabler-clock-exclamation me-1"></i>
+                        Bukan tanggal hari ini
+                    </div>
+                </div>
+                
+                <!-- Pesan dengan icon -->
+                <p class="text-muted mb-0" style="font-size: 0.95rem;">
+                    <i class="ti tabler-info-circle me-1"></i>
+                    Pastikan Anda ingin menginput data di tanggal tersebut
+                </p>
+            </div>
+            
+            <!-- Footer dengan tombol modern -->
+            <div class="modal-footer border-0 bg-light p-4 gap-2">
+                <button type="button" class="btn btn-lg btn-light border shadow-sm flex-fill" id="btnInputToday"
+                        style="border-radius: 12px; font-weight: 600; transition: all 0.3s;">
+                    <i class="ti tabler-calendar-today me-2"></i>
+                    <span class="d-none d-sm-inline">Tidak,</span> Isi Data Hari Ini
+                </button>
+                <button type="button" class="btn btn-lg btn-warning text-white shadow flex-fill" id="btnConfirmDate"
+                        style="background: linear-gradient(135deg, #ff9800 0%, #ff6f00 100%); border: none; border-radius: 12px; font-weight: 600; transition: all 0.3s;">
+                    <i class="ti tabler-check me-2"></i>
+                    <span class="d-none d-sm-inline">Ya,</span> Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Animasi pulse untuk icon */
+@keyframes pulse-warning {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 15px rgba(255, 152, 0, 0);
+    }
+}
+
+/* Hover effect untuk tombol */
+#btnInputToday:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+#btnConfirmDate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 111, 0, 0.4) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    #modalConfirmDate .modal-body {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    #modalConfirmDate .modal-footer {
+        flex-direction: column;
+        padding: 1rem !important;
+    }
+    
+    #modalConfirmDate .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    #modalConfirmDate .modal-footer .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Gradient background untuk header */
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ff9800 0%, #ff6f00 100%) !important;
+}
+</style>
+
 {{-- MODAL KONFIRMASI EXPORT --}}
 <div class="modal fade" id="modalExportConfirm" tabindex="-1">
     <div class="modal-dialog">
@@ -696,6 +820,63 @@ document.addEventListener('DOMContentLoaded', function() {
         loadPeternakList();
     });
 
+    // ========== DATE CONFIRMATION LOGIC ==========
+    let dateConfirmed = false;
+    let pendingCell = null;
+    
+    function checkDateConfirmation(cell) {
+        const today = new Date().toISOString().split('T')[0];
+        const selectedDate = document.getElementById('tanggalPicker').value;
+        
+        // Jika tanggal hari ini, langsung lanjut tanpa konfirmasi
+        if (selectedDate === today) {
+            return true;
+        }
+        
+        // Jika sudah dikonfirmasi sebelumnya (dalam session yang sama), langsung lanjut
+        if (dateConfirmed) {
+            return true;
+        }
+        
+        // Tampilkan modal konfirmasi
+        pendingCell = cell;
+        const modal = new bootstrap.Modal(document.getElementById('modalConfirmDate'));
+        
+        // Format tanggal untuk ditampilkan
+        const dateObj = new Date(selectedDate + 'T00:00:00');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('selectedDateText').textContent = dateObj.toLocaleDateString('id-ID', options);
+        
+        modal.show();
+        return false;
+    }
+    
+    // Tombol "Ya, Lanjutkan"
+    document.getElementById('btnConfirmDate')?.addEventListener('click', function() {
+        dateConfirmed = true;
+        bootstrap.Modal.getInstance(document.getElementById('modalConfirmDate')).hide();
+        
+        // Lanjutkan dengan cell yang pending
+        if (pendingCell) {
+            const display = pendingCell.querySelector('.cell-display');
+            const input = pendingCell.querySelector('.cell-input');
+            
+            display.classList.add('d-none');
+            input.classList.remove('d-none');
+            input.focus();
+            input.select();
+            
+            pendingCell = null;
+        }
+    });
+    
+    // Tombol "Tidak, Isi Data Hari Ini"
+    document.getElementById('btnInputToday')?.addEventListener('click', function() {
+        bootstrap.Modal.getInstance(document.getElementById('modalConfirmDate')).hide();
+        const today = new Date().toISOString().split('T')[0];
+        goToDate(today);
+    });
+
     // ========== EDITABLE CELL ==========
     document.querySelectorAll('.editable-cell').forEach(cell => {
         const display = cell.querySelector('.cell-display');
@@ -703,6 +884,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         cell.addEventListener('click', function(e) {
             if (e.target.classList.contains('cell-input')) return;
+            
+            // Cek konfirmasi tanggal dulu
+            if (!checkDateConfirmation(cell)) {
+                return; // Stop, tunggu konfirmasi
+            }
             
             display.classList.add('d-none');
             input.classList.remove('d-none');
