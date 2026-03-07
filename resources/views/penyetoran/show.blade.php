@@ -521,7 +521,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.getElementById('todayBtn')?.addEventListener('click', function() {
-        goToDate(new Date().toISOString().split('T')[0]);
+        // Gunakan tanggal lokal timezone
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        goToDate(`${year}-${month}-${day}`);
     });
 
     // ========== LOAD PETERNAK LIST ==========
@@ -825,7 +830,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let pendingCell = null;
     
     function checkDateConfirmation(cell) {
-        const today = new Date().toISOString().split('T')[0];
+        // Gunakan tanggal lokal timezone (bukan UTC) agar akurat di pagi hari
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const today = `${year}-${month}-${day}`;
+        
         const selectedDate = document.getElementById('tanggalPicker').value;
         
         // Jika tanggal hari ini, langsung lanjut tanpa konfirmasi
@@ -873,8 +884,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tombol "Tidak, Isi Data Hari Ini"
     document.getElementById('btnInputToday')?.addEventListener('click', function() {
         bootstrap.Modal.getInstance(document.getElementById('modalConfirmDate')).hide();
-        const today = new Date().toISOString().split('T')[0];
-        goToDate(today);
+        // Gunakan tanggal lokal timezone
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        goToDate(`${year}-${month}-${day}`);
     });
 
     // ========== EDITABLE CELL ==========

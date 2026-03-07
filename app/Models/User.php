@@ -42,6 +42,14 @@ class User extends Authenticatable
         return $this->belongsTo(PosPenyetoran::class, 'pos_id');
     }
 
+    /**
+     * Relasi ke Peternak (untuk role peternak)
+     */
+    public function peternak()
+    {
+        return $this->hasOne(Peternak::class, 'user_id');
+    }
+
     // ========== HELPER ROLE ==========
     
     /**

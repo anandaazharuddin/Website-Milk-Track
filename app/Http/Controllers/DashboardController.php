@@ -26,7 +26,12 @@ class DashboardController extends Controller
             return redirect()->route('penyetoran.index');
         }
 
-        // ========== DASHBOARD UNTUK ROLE LAIN (PETERNAK, dll) ==========
+        // ========== DASHBOARD KHUSUS UNTUK PETERNAK ==========
+        if ($user->isPeternak()) {
+            return $this->dashboardPeternak($request);
+        }
+
+        // ========== DASHBOARD UNTUK ROLE LAIN ==========
         $today = Carbon::today();
         $periode = $request->get('periode', 'minggu'); // default: minggu
 
@@ -171,5 +176,92 @@ class DashboardController extends Controller
             'dataPerPos',
             'periode'
         ));
+    }
+
+    /**
+     * Dashboard khusus untuk role Peternak
+     */
+    private function dashboardPeternak(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Ambil data peternak berdasarkan user_id
+        $peternak = Peternak::where('user_id', $user->id)->with('pos')->first();
+
+        // Jika user tidak terkait dengan data peternak
+        if (!$peternak) {
+            return view('dashboard-peternak', ['peternak' => null, 'error' => 'Data peternak tidak ditemukan. Silakan hubungi admin.']);
+        }
+
+        // Periode filter
+        $periode = $request->get('periode', 'bulan_ini');
+        $tanggalMulai = match($periode) {
+            '7_hari' => Carbon::today()->subDays(6),
+            'bulan_ini' => Carbon::now()->startOfMonth(),
+            'bulan_lalu' => Carbon::now()->subMonth()->startOfMonth(),
+            '3_bulan' => Carbon::now()->subMonths(3)->startOfMonth(),
+            default => Carbon::now()->startOfMonth(),
+        };
+        
+        $tanggalSelesai = match($periode) {
+            'bulan_lalu' => Carbon::now()->subMonth()->endOfMonth(),
+            default => Carbon::today(),
+        };
+
+        // Statistik penyetoran
+        $penyetoranData = PenyetoranHarian::where('peternak_id', $peternak->id)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])->get();
+
+        $totalVolumePagi = $penyetoranData->sum('volume_pagi');
+        $totalVolumeSore = $penyetoranData->sum('volume_sore');
+        $totalVolume = $totalVolumePagi + $totalVolumeSore;
+        $rataRataVolume = $penyetoranData->count() > 0 ? ($totalVolume / $penyetoranData->count()) : 0;
+
+        // Rata-rata BJ
+        $bjPagiAvg = $penyetoranData->whereNotNull('bj_pagi')->avg('bj_pagi');
+        $bjSoreAvg = $penyetoranData->whereNotNull('bj_sore')->avg('bj_sore');
+        $rataRataBJ = ($bjPagiAvg && $bjSoreAvg) ? number_format((($bjPagiAvg + $bjSoreAvg) / 2) / 1000, 3) : null;
+
+        // Total hari menyetor
+        $totalHariMenyetor = $penyetoranData->filter(function($item) {
+            return ($item->volume_pagi ?? 0) > 0 || ($item->volume_sore ?? 0) > 0;
+        })->count();
+
+        // Penyetoran hari ini
+        $penyetoranHariIni = PenyetoranHarian::where('peternak_id', $peternak->id)
+            ->whereDate('tanggal', Carbon::today())->first();
+
+        // Grafik data
+        $grafikData = PenyetoranHarian::where('peternak_id', $peternak->id)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->orderBy('tanggal', 'asc')->get()
+            ->map(function($item) {
+                return [
+                    'tanggal' => Carbon::parse($item->tanggal)->format('d/m'),
+                    'tanggal_lengkap' => Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y'),
+                    'volume_pagi' => $item->volume_pagi ?? 0,
+                    'volume_sore' => $item->volume_sore ?? 0,
+                    'total_volume' => ($item->volume_pagi ?? 0) + ($item->volume_sore ?? 0),
+                    'bj_pagi' => $item->bj_pagi ? number_format($item->bj_pagi / 1000, 3) : '-',
+                    'bj_sore' => $item->bj_sore ? number_format($item->bj_sore / 1000, 3) : '-',
+                ];
+            });
+
+        // Riwayat 10 terakhir
+        $riwayat = PenyetoranHarian::where('peternak_id', $peternak->id)
+            ->orderBy('tanggal', 'desc')->limit(10)->get()
+            ->map(function($item) {
+                return [
+                    'tanggal' => Carbon::parse($item->tanggal)->locale('id')->isoFormat('dddd, D MMMM Y'),
+                    'tanggal_short' => Carbon::parse($item->tanggal)->format('d/m/Y'),
+                    'volume_pagi' => $item->volume_pagi ?? 0,
+                    'volume_sore' => $item->volume_sore ?? 0,
+                    'total_volume' => ($item->volume_pagi ?? 0) + ($item->volume_sore ?? 0),
+                    'bj_pagi' => $item->bj_pagi ? number_format($item->bj_pagi / 1000, 3) : '-',
+                    'bj_sore' => $item->bj_sore ? number_format($item->bj_sore / 1000, 3) : '-',
+                ];
+            });
+
+        return view('dashboard-peternak', compact('peternak','totalVolume','totalVolumePagi','totalVolumeSore','rataRataVolume','rataRataBJ','totalHariMenyetor','penyetoranHariIni','grafikData','riwayat','periode'));
     }
 }
